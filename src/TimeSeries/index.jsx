@@ -1,7 +1,7 @@
 import { Sequence, useCurrentFrame, useVideoConfig } from "remotion";
 import BarChart from "./BarChart";
 
-export default function ({ max, csv, colors }) {
+export default function ({ max, csv, colors, prefix, suffix }) {
   const frame = useCurrentFrame();
   const video = useVideoConfig();
 
@@ -15,6 +15,8 @@ export default function ({ max, csv, colors }) {
           max={max}
           csv={csv}
           colors={colors}
+          prefix={prefix}
+          suffix={suffix}
         />
       </Sequence>
     </div>
