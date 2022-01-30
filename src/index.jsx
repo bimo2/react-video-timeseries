@@ -1,4 +1,5 @@
-import {registerRoot} from 'remotion';
-import {RemotionVideo} from './Video';
+import { registerRoot } from 'remotion';
+import Video from './Video';
+import sample from '../sample';
 
-registerRoot(RemotionVideo);
+registerRoot(() => <Video {...sample} />);
