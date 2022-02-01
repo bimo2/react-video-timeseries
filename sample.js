@@ -2,14 +2,14 @@ export default {
   video: {
     height: 1000,
     width: 1000,
-    duration: 5,
+    speed: 1,
   },
   data: {
     title: 'S&P 500 by Market Cap.',
     range: [new Date('2001'), new Date('2022')],
     prefix: '$',
     suffix: ' B',
-    colors: ['#000000', '#747474', '#ff9900', '#4285f4', '#3c5898', '#e82127', '#7ab547', '#211e1e', '#1a1f71'],
+    colors: ['#000000', '#f25022', '#ff9900', '#4285f4', '#3c5898', '#e82127', '#7ab547', '#211e1e', '#1a1f71'],
     max: 6,
     csv: [
       ['AAPL', 'MSFT', 'AMZN', 'GOOG', 'FB', 'TSLA', 'NVDA', 'JPM', 'V'],

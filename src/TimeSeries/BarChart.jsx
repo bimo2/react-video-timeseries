@@ -1,20 +1,37 @@
+import { useCurrentFrame, interpolate, spring } from 'remotion';
+
 const BAR_PX = 60;
 const BORDER_PX = 10;
 const SPACING_PX = 20;
 const CHARACTER_PX = 26;
 const FLOATING_POINTS = 0;
+const FPS = 40;
 
-export default function ({ frame, height, width, max, csv, colors, prefix, suffix }) {
+export default function ({ height, width, max, csv, colors, prefix, suffix }) {
+  const frame = useCurrentFrame();
   const [labels, ...data] = csv;
 
-  const frameData = data[frame].map((value, i) => ({
-    label: labels[i],
-    color: colors[i],
-    value,
-  }));
+  const frameData = [];
+  const index = Math.floor(frame / FPS);
+
+  for (let i = 0; i < data[index].length; i++) {
+    if (data[index + 1]) {
+      frameData.push({
+        label: labels[i],
+        color: colors[i],
+        range: [data[index][i], data[index + 1][i]],
+      });
+    }
+  }
 
   const renderData = frameData
-    .filter((a) => a.value)
+    .filter((a) => a.range[0] && a.range[1])
+    .map(({ range, ...rest }) => {
+      return {
+        ...rest,
+        value: interpolate(frame % FPS, [0, FPS - 1], range),
+      }
+    })
     .sort((a, b) => b.value - a.value)
     .slice(0, max);
 
