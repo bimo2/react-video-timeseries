@@ -26,12 +26,10 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
 
   const renderData = frameData
     .filter((a) => a.range[0] && a.range[1])
-    .map(({ range, ...rest }) => {
-      return {
-        ...rest,
-        value: interpolate(frame % FPS, [0, FPS - 1], range),
-      }
-    })
+    .map(({ range, ...rest }) => ({
+      ...rest,
+      value: interpolate(frame % FPS, [0, FPS - 1], range),
+    }))
     .sort((a, b) => b.value - a.value)
     .slice(0, max);
 
@@ -48,7 +46,7 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
   const valueSafeMargin = Math.max(...renderData.map((a) => a.value.toFixed(FLOATING_POINTS).length + prefix.length + suffix.length)) * CHARACTER_PX;
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${width} ${height}`}>
+    <svg xmlns="http://www.w3.org/2000/svg" height={height} width={width} viewBox={`0 0 ${width} ${height}`}>
       {renderData.map(({ label, color, value }, i) => {
         const barWidth = ((renderX - labelSafeMargin) / maxValue) * value;
         const y = offsetY + (i * (BAR_PX + SPACING_PX));
