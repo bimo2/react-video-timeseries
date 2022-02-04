@@ -1,4 +1,5 @@
-import { useCurrentFrame, interpolate, spring } from 'remotion';
+import { useCurrentFrame, interpolate } from 'remotion';
+import { fontFamily } from './styles';
 
 const BAR_PX = 60;
 const BORDER_PX = 10;
@@ -15,13 +16,13 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
   const index = Math.floor(frame / FPS);
 
   for (let i = 0; i < data[index].length; i++) {
-    if (data[index + 1]) {
-      frameData.push({
-        label: labels[i],
-        color: colors[i],
-        range: [data[index][i], data[index + 1][i]],
-      });
-    }
+    frameData.push({
+      label: labels[i],
+      color: colors[i],
+      range: data[index + 1]
+        ? [data[index][i], data[index + 1][i]]
+        : [data[index][i], data[index][i]],
+    });
   }
 
   const renderData = frameData
@@ -37,10 +38,6 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
   const renderX = width - (2 * BORDER_PX);
   const renderY = (renderData.length * BAR_PX) + ((renderData.length - 1) * SPACING_PX) + (2 * BORDER_PX);
   const offsetY = (height - renderY) / 2;
-
-  const fontStyle = {
-    fontFamily: '-apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-  };
 
   const labelSafeMargin = Math.max(...renderData.map((a) => a.label.length)) * CHARACTER_PX;
   const valueSafeMargin = Math.max(...renderData.map((a) => a.value.toFixed(FLOATING_POINTS).length + prefix.length + suffix.length)) * CHARACTER_PX;
@@ -67,7 +64,7 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
               x={barWidth + 20}
               y={textY}
               alignmentBaseline="middle"
-              style={{ ...fontStyle, fontSize: BAR_PX * 0.5, fontWeight: 'bold' }}
+              style={{ fontFamily, fontSize: BAR_PX * 0.5, fontWeight: 'bold' }}
             >
               {label}
             </text>
@@ -79,7 +76,7 @@ export default function ({ height, width, max, csv, colors, prefix, suffix }) {
                 y={textY}
                 textAnchor="end"
                 alignmentBaseline="middle"
-                style={{ ...fontStyle, fontSize: BAR_PX * 0.45 }}
+                style={{ fontFamily, fontSize: BAR_PX * 0.45 }}
               >
                 {`${prefix}${value.toFixed(FLOATING_POINTS)}${suffix}`}
               </text>
